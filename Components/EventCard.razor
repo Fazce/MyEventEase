@@ -1,0 +1,22 @@
+<div class="event-card">
+    <h3>@(string.IsNullOrWhiteSpace(EventName) ? "Unnamed Event" : EventName)</h3>
+    <p>
+        <strong>Date:</strong>
+        @(EventDate == default ? "Date not set" : EventDate.ToString("MMMM dd, yyyy"))
+    </p>
+    <p>
+        <strong>Location:</strong>
+        @(string.IsNullOrWhiteSpace(Location) ? "Location not set" : Location)
+    </p>
+</div>
+
+@code {
+    [Parameter]
+    public string EventName { get; set; } = string.Empty;
+
+    [Parameter]
+    public DateTime EventDate { get; set; }
+
+    [Parameter]
+    public string Location { get; set; } = string.Empty;
+}

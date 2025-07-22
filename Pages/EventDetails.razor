@@ -1,0 +1,30 @@
+@page "/events/{EventId:int}"
+
+@code {
+    [Parameter]
+    public int EventId { get; set; }
+
+    Event? SelectedEvent;
+
+    List<Event> Events = new()
+    {
+        new Event { Id = 1, Name = "Annual Gala", Date = new DateTime(2024, 10, 15), Location = "Grand Ballroom, City Hotel" },
+        new Event { Id = 2, Name = "Tech Conference", Date = new DateTime(2024, 11, 5), Location = "Convention Center" },
+        new Event { Id = 3, Name = "Holiday Mixer", Date = new DateTime(2024, 12, 20), Location = "Downtown Rooftop" }
+    };
+
+    protected override void OnInitialized()
+    {
+        SelectedEvent = Events.FirstOrDefault(e => e.Id == EventId);
+    }
+}
+
+@if (SelectedEvent != null)
+{
+    <EventCard EventName="@SelectedEvent.Name" EventDate="@SelectedEvent.Date" Location="@SelectedEvent.Location" />
+    <NavLink class="btn btn-success" href="@($"/register/{SelectedEvent.Id}")">Register</NavLink>
+}
+else
+{
+    <p>Event not found.</p>
+}

@@ -1,0 +1,28 @@
+@page "/attendance/{EventId:int}"
+@inject IAttendanceService AttendanceService
+
+<h3>Attendance (@records.Count)</h3>
+
+@if (records.Count == 0)
+{
+    <p>No one has registered yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var r in records)
+        {
+            <li>@r.UserEmail — @r.Timestamp.ToLocalTime():t on @r.Timestamp.ToLocalTime():d</li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public int EventId { get; set; }
+    List<AttendanceRecord> records = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        records = await AttendanceService.GetByEventAsync(EventId);
+    }
+}

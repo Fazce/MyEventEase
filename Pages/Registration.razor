@@ -1,0 +1,62 @@
+@page "/register/{EventId:int}"
+@using System.ComponentModel.DataAnnotations
+@inject UserSessionService UserSessionService
+@inject IAttendanceService AttendanceService
+@inject NavigationManager NavManager
+
+
+<h1>Register for Event</h1>
+
+@if (IsValidEvent)
+{
+    <EditForm Model="@registrationModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label>Name:</label>
+            <InputText @bind-Value="registrationModel.Name" />
+            <ValidationMessage For="@(() => registrationModel.Name)" />
+        </div>
+        <div>
+            <label>Email:</label>
+            <InputText @bind-Value="registrationModel.Email" />
+            <ValidationMessage For="@(() => registrationModel.Email)" />
+        </div>
+        <button type="submit">Register</button>
+    </EditForm>
+    @if (isRegistered)
+    {
+        <p>Registration successful!</p>
+    }
+}
+else
+{
+    <p>Invalid event. Please select a valid event from the <NavLink href="/events">Event List</NavLink>.</p>
+}
+
+@code {
+    [Parameter]
+    public int EventId { get; set; }
+
+    List<int> ValidEventIds = new() { 1, 2, 3 };
+    bool IsValidEvent => ValidEventIds.Contains(EventId);
+
+    RegistrationModel registrationModel = new();
+    bool isRegistered = false;
+
+    public class RegistrationModel
+    {
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+    }
+
+    void HandleValidSubmit()
+    {
+        isRegistered = true;
+    }
+}
